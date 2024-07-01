@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <script type="text/javascript" src="https://unpkg.com/minigrid@3.1.1/dist/minigrid.min.js"></script>
+  <link rel="stylesheet" href="/photos/photos.css">
+  <script type="text/javascript" src="/photos/photo.js"></script>
+
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sitjac.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="统计和机器学习 - 2022秋季研究生课程预备知识 概率论基础： 随机现象、随机事件、随机变量、概率、分布函数、期望、方差等概念 常见的一元和多元随机变量的分布和性质   点估计和区间估计： 估计的三种思想（替换、似然、拟合） 最大似然估计 利用枢轴量法构造区间估计 区间估计与假设检验的对应关系   假设检验： 假设检验的基本步骤和方法 如何利用检验统计量、拒绝域和 p 值进行检验 如何对单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Probability Tutorial Zero">
+<meta property="og:url" content="https://sitjac.github.io/probability-preliminaries-2022/index.html">
+<meta property="og:site_name" content="sitJac&#39;s Blog">
+<meta property="og:description" content="统计和机器学习 - 2022秋季研究生课程预备知识 概率论基础： 随机现象、随机事件、随机变量、概率、分布函数、期望、方差等概念 常见的一元和多元随机变量的分布和性质   点估计和区间估计： 估计的三种思想（替换、似然、拟合） 最大似然估计 利用枢轴量法构造区间估计 区间估计与假设检验的对应关系   假设检验： 假设检验的基本步骤和方法 如何利用检验统计量、拒绝域和 p 值进行检验 如何对单">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-18T03:54:06.000Z">
+<meta property="article:modified_time" content="2024-05-08T14:53:20.319Z">
+<meta property="article:author" content="sitJac">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sitjac.github.io/probability-preliminaries-2022/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Probability Tutorial Zero | sitJac's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sitJac's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://sitjac.github.io/probability-preliminaries-2022/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="sitJac">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sitJac's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Probability Tutorial Zero
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-18 11:54:06" itemprop="dateCreated datePublished" datetime="2022-09-18T11:54:06+08:00">2022-09-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/ECNU/" itemprop="url" rel="index"><span itemprop="name">ECNU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="note info">
+
+<ul>
+<li>统计和机器学习 - 2022秋季研究生课程预备知识</li>
+<li>概率论基础：<ul>
+<li>随机现象、随机事件、随机变量、概率、分布函数、期望、方差等概念</li>
+<li>常见的一元和多元随机变量的分布和性质</li>
+</ul>
+</li>
+<li>点估计和区间估计：<ul>
+<li>估计的三种思想（替换、似然、拟合）</li>
+<li>最大似然估计</li>
+<li>利用枢轴量法构造区间估计</li>
+<li>区间估计与假设检验的对应关系</li>
+</ul>
+</li>
+<li>假设检验：<ul>
+<li>假设检验的基本步骤和方法</li>
+<li>如何利用检验统计量、拒绝域和 p 值进行检验</li>
+<li>如何对单个正态分布和两个正态分布的参数进行假设检验</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<span id="more"></span>
+
+<h1 id="Tutorial-Zero-Preliminaries"><a href="#Tutorial-Zero-Preliminaries" class="headerlink" title="Tutorial Zero: Preliminaries"></a>Tutorial Zero: Preliminaries</h1><h2 id="Part-One：Statistics-and-Sampling-Distribution"><a href="#Part-One：Statistics-and-Sampling-Distribution" class="headerlink" title="Part One：Statistics and Sampling Distribution"></a>Part One：Statistics and Sampling Distribution</h2><ul>
+<li>数据： ${x_i: i&#x3D;1,2,\cdots,n}$</li>
+<li>常见假定：独立同分布，也就是说，<br>$$<br>x_i \overset{i.i.d}{\sim} X<br>$$<br>其中，$X$是一个随机变量。</li>
+</ul>
+<h3 id="随机变量的定义及常见分布"><a href="#随机变量的定义及常见分布" class="headerlink" title="随机变量的定义及常见分布"></a>随机变量的定义及常见分布</h3><h4 id="随机变量的定义"><a href="#随机变量的定义" class="headerlink" title="随机变量的定义"></a>随机变量的定义</h4><ul>
+<li>随机现象：出现的结果不唯一，事前无法得知哪种结果出现的现象。</li>
+</ul>
+<ol>
+<li>投掷骰子的结果；</li>
+<li>抽签分组的结果；</li>
+<li>从家到学校所花费的时间；</li>
+<li>明天的上证指数；</li>
+</ol>
+<ul>
+<li><p>样本空间：随机现象的所有结果。常用$\Omega$来表示。</p>
+</li>
+<li><p>随机事件：样本空间中的一个我们所关心的子集，常用大写的英文字母来表示，如A,B,C等。特别的随机事件类型有：</p>
+</li>
+<li><p>必然事件：一定会发生的事件，$\Omega$；</p>
+</li>
+<li><p>不可能事件：一定不会发生的事件，$\emptyset$;</p>
+</li>
+<li><p>概率：一个随机事件发生的可能性；</p>
+</li>
+<li><p>概率的公理化定义：在一个样本空间$\Omega$及其<span style="border-bottom:2px solid lightgreen;">事件域</span>$\mathcal{F}$中，对于任意随机事件$A \in \mathcal{F}$，其概率$P(A)$是一个实数，且满足：</p>
+</li>
+</ul>
+<ol>
+<li>非负性：$P(A) \geq 0$.</li>
+<li>正则性：对于必然事件$\Omega$， $P(\Omega) &#x3D; 1$；</li>
+<li>可列可加性：若$A_1,A_2,\cdots,A_n,\cdots$是两两互不相容的事件，即对任意$i \neq j$，有$A_i \cap A_j &#x3D; \emptyset$，则有<br>$$<br>P\left(\cup_{i&#x3D;1}^\infty A_i\right) &#x3D; \sum_{i&#x3D;1}^\infty P(A_i).<br>$$</li>
+</ol>
+<ul>
+<li>随机变量：随机事件的数量表现，是随机事件<strong>实数化</strong>的结果。常用$X,Y,Z$等来表示。随机变量的值域往往是实数或其子集。</li>
+</ul>
+<p>例一：在投掷两枚均匀硬币的过程中，样本空间为$\Omega &#x3D; {\text{正正，正反，反正，反反}}$。我们关心的是硬币投掷的结果是否均为正面，或硬币投掷的结果是否不同。设随机事件$A$表示“硬币投掷的结果均为正面”，即$A &#x3D; {\text{正正}}$。设随机事件$B$表示“硬币投掷的结果不同”，即$B &#x3D; {\text{正反，反正}}$。设$X$表示出现硬币正面朝上的次数。于是<br>$$<br>X &#x3D; \begin{cases}<br>0 &amp; \text{两反}\<br>1 &amp; \text{一正一反}\<br>2 &amp; \text{两正}\<br>\end{cases}<br>$$<br>设$Y$表示出现两枚硬币是否均为正面。于是<br>$$<br>X &#x3D; \begin{cases}<br>1 &amp; \text{是}\<br>0 &amp; \text{否}\<br>\end{cases}<br>$$<br>我们可以发现，${X&#x3D;2}$和${Y&#x3D;1}$都表示两枚硬币均出现正面的现象，但所构造的随机变量不同。这表明，随机变量可以根据问题本身而构造，而且构造方式不唯一。</p>
+<h4 id="随机变量的表示方式"><a href="#随机变量的表示方式" class="headerlink" title="随机变量的表示方式"></a>随机变量的表示方式</h4><p>因为随机变量用来刻画不确定性的结果的，所以，如何量化表示随机变量所代表的不确定性是一个重要的问题。通常，我们采用累积分布函数（c.d.f.）来刻画随机变量，即<br>$$<br>F_X(x) &#x3D; P(X\leq x).<br>$$<br>也就是说，$F_{X}(x)$表示的是随机变量$X$小于等于$x$的概率，前面的$X$表示随机变量，后面的$x$表示的是一个实数。</p>
+<p>根据概率的性质，累积分布函数满足：（1）单调性；（2）有界性；和（3）右连续性。</p>
+<p>除了累积分布函数之外，还有其他常用的方式来刻画随机变量。</p>
+<ul>
+<li>分布列&#x2F;概率质量函数$P(X&#x3D;x)$：常常用于刻画离散的随机变量；</li>
+<li>概率密度函数$p(x)$：常常用于刻画连续的随机变量；<br>两者均满足：（1）非负性；（2）正则性。</li>
+</ul>
+<h4 id="常见的一元随机变量"><a href="#常见的一元随机变量" class="headerlink" title="常见的一元随机变量"></a>常见的一元随机变量</h4><h5 id="二项分布"><a href="#二项分布" class="headerlink" title="二项分布"></a>二项分布</h5><ul>
+<li>刻画$n$次伯努利试验中成功的次数。</li>
+<li>典型例子：抛硬币。</li>
+<li>记为 $b(n,p)$，其中，$n$表示试验次数，$p$表示单次伯努利试验成功的概率。</li>
+<li>分布列为<br>$$<br>P(X &#x3D; k) &#x3D; C_n^k p^{k} (1-p)^{n-k}, k&#x3D;0,1,2,\cdots,n.<br>$$</li>
+<li>特例：二点分布&#x2F;伯努利分布$b(1,p)$。</li>
+</ul>
+<h5 id="负二项分布"><a href="#负二项分布" class="headerlink" title="负二项分布"></a>负二项分布</h5><ul>
+<li>刻画在伯努利试验中第$r$次成功所需要的试验次数。</li>
+<li>记为$Nb(r,p)$，其中，$r$表示试验的成功次数，$p$表示单次伯努利试验成功的概率。</li>
+<li>分布列为<br>$$<br>P(X&#x3D;k) &#x3D; C_{k-1}^{r-1} p^{r} (1-p)^{k-r-1}<br>$$</li>
+<li>特例：几何分布$Ge(p)&#x3D; Nb(1,p)$。</li>
+<li>无记忆性：$P(X &gt; m+n|X&gt;m) &#x3D; P(X&gt;n)$。</li>
+</ul>
+<h5 id="泊松分布"><a href="#泊松分布" class="headerlink" title="泊松分布"></a>泊松分布</h5><ul>
+<li>刻画一个单位内某事件发生的次数。</li>
+<li>记为$P(\lambda)$，其中，$\lambda&gt;0$参数。</li>
+<li>分布列为<br>$$<br>P(X&#x3D;k) &#x3D;\frac{\lambda^{k}}{k!} \exp{-\lambda}.<br>$$</li>
+<li>泊松分布可以看作二项分布的一种极限状况（$n$趋于无穷）。</li>
+</ul>
+<h5 id="均匀分布"><a href="#均匀分布" class="headerlink" title="均匀分布"></a>均匀分布</h5><ul>
+<li>刻画定义在区间$(a,b)$上等概率的取值。</li>
+<li>记为$U(a,b)$，其中，$a,b$是两个参数。</li>
+<li>密度函数为<br>$$<br>p(x) &#x3D; \frac{1}{b-a} I(a&lt; x&lt; b).<br>$$</li>
+</ul>
+<h5 id="正态分布"><a href="#正态分布" class="headerlink" title="正态分布"></a>正态分布</h5><ul>
+<li>刻画误差的分布。</li>
+<li>记为$N(\mu,\sigma^2)$，其中，$\mu\in R$和$\sigma^2&gt;0$是两个参数。</li>
+<li>密度函数为<br>$$<br>p(x) &#x3D; \frac{1}{\sqrt{2\pi \sigma^2}} \exp{-(x-\mu)^2&#x2F;(2\sigma^2)}, x\in R.<br>$$</li>
+<li>特例：标准正态分布$N(0,1)$。</li>
+</ul>
+<h5 id="卡方分布"><a href="#卡方分布" class="headerlink" title="卡方分布"></a>卡方分布</h5><ul>
+<li>$n$个独立标准的平方和，即$\chi^2 &#x3D; \sum_{i&#x3D;1}^n Z_{i}^2$，其中$Z_i\overset{i.i.d}{\sim} N(0,1)$。</li>
+<li>记为$\chi^2 \sim \chi^2(n)$。</li>
+<li>$\chi^{2}(n) &#x3D; Ga(n&#x2F;2,1&#x2F;2)$。</li>
+</ul>
+<h5 id="F-分布"><a href="#F-分布" class="headerlink" title="$F$分布"></a>$F$分布</h5><ul>
+<li>两个卡方分布的比值，即$F &#x3D; \frac{\chi^2_1&#x2F;m}{\chi^2_2&#x2F;n}$，其中$\chi_1^2\sim \chi^2(m)$和$\chi_2^2\sim \chi^2(n)$且$\chi^2_1$和$\chi_2^2$独立。</li>
+<li>记为$F \sim F(m,n)$。</li>
+</ul>
+<h5 id="t-分布"><a href="#t-分布" class="headerlink" title="$t$分布"></a>$t$分布</h5><ul>
+<li>一个标准正态分布与一个卡方分布的平方根的比值，即$t &#x3D; \frac{Z}{\sqrt{\chi^2&#x2F;n}}$，其中$Z\sim N(0,1)$和$\chi^2\sim \chi^2(n)$且$Z$和$\chi^2$独立。</li>
+<li>记为$t \sim t(n)$。</li>
+</ul>
+<h5 id="指数分布"><a href="#指数分布" class="headerlink" title="指数分布"></a>指数分布</h5><ul>
+<li>刻画寿命。</li>
+<li>记为$Exp(\lambda)$，其中，$\lambda&gt;0$是参数。</li>
+<li>密度函数为<br>$$<br>p(x) &#x3D; \lambda \exp{-\lambda x}, x&gt;0.<br>$$</li>
+<li>无记忆性。</li>
+</ul>
+<h5 id="Gamma-分布"><a href="#Gamma-分布" class="headerlink" title="Gamma 分布"></a>Gamma 分布</h5><ul>
+<li>Gamma函数 $\Gamma(\alpha) &#x3D; \int_{0}^{\infty} x^{\alpha-1} \exp{-x} \text{d} x$。</li>
+<li>Gamma函数的性质：</li>
+</ul>
+<ol>
+<li>$\Gamma(1) &#x3D; 1$；</li>
+<li>$\Gamma(1&#x2F;2) &#x3D; \sqrt{\pi}$；</li>
+<li>$\Gamma(\alpha+1) &#x3D; \alpha \Gamma(\alpha)$；</li>
+<li>$\Gamma(n+1) &#x3D; n\Gamma(n) &#x3D; n!$；</li>
+</ol>
+<ul>
+<li>记为$Ga(\alpha,\lambda)$, 其中，$\alpha&gt;0$是形状参数,$\lambda&gt;0$是尺度参数。</li>
+<li>密度函数为<br>$$<br>p(x) &#x3D; \frac{\lambda^{\alpha}}{\Gamma(\alpha)} x^{\alpha-1} \exp{-\lambda x}, x&gt;0<br>$$</li>
+<li>特例：$Exp(\lambda) &#x3D; Ga(1,\lambda)$。</li>
+</ul>
+<h5 id="Beta-分布"><a href="#Beta-分布" class="headerlink" title="Beta 分布"></a>Beta 分布</h5><ul>
+<li>Beta函数 $B(a,b) &#x3D; \int_{0}^1 x^{a-1} (1-x)^{b-1} \text{d}x, a,b&gt;0$。</li>
+<li>Beta函数的性质：</li>
+</ul>
+<ol>
+<li>$B(a,b) &#x3D; B(b,a)$；</li>
+<li>$B(a,b) &#x3D; \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$</li>
+</ol>
+<ul>
+<li>记为$Be(a,b)$，其中，$a,b&gt;0$是两个参数。</li>
+<li>密度函数为<br>$$<br>p(x) &#x3D; \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} x^{a-1} (1-x)^{b-1}, 0&lt;x&lt;1.<br>$$</li>
+</ul>
+<h4 id="随机向量"><a href="#随机向量" class="headerlink" title="随机向量"></a>随机向量</h4><ul>
+<li><p>$\mathbf{X} &#x3D; (X_1,X_2,\cdots,X_p)’$是基于同一个样本空间而定义的$p$维随机向量，其中每一维$X_i$是第$i$个随机变量。</p>
+</li>
+<li><p>联合分布函数为<br>$$<br>F(x_1,x_2,\cdots,x_p) &#x3D; P(X_1\leq x_1, X_2 \leq x_2,\cdots,X_p \leq x_p).<br>$$</p>
+</li>
+<li><p>联合分布列为$P(X_1 &#x3D; x_1,X_2&#x3D;x_2,\cdots,X_p &#x3D; x_p).$</p>
+</li>
+<li><p>联合分布列为$p(x_1,x_2,\cdots,x_p)$满足<br>$$<br>F(x_1,x_2,\cdots,x_p) &#x3D; \int_{-\infty}^{x_1}\int_{-\infty}^{x_2}\cdots \int_{-\infty}^{x_p} p(t_1,t_2,\cdots,t_p) \text{d}t_p \cdots \text{d}x_2 \text{d}x_1.<br>$$</p>
+</li>
+<li><p>边际分布函数为$F_{X_i}(x_i) &#x3D; P(X_i\leq x_i)$；</p>
+</li>
+<li><p>边际分布列为$P(X_i &#x3D; x_i)$；</p>
+</li>
+<li><p>边际密度函数为$p(x_i)$；</p>
+</li>
+<li><p>独立性满足</p>
+</li>
+</ul>
+<ol>
+<li>$F(x_1,x_2,\cdots,x_p) &#x3D; \prod_{i&#x3D;1}^p F(x_i)$；</li>
+<li>$P(X_1 &#x3D; x_1,X_2&#x3D;x_2,\cdots,X_p &#x3D; x_p) &#x3D; \prod_{i&#x3D;1}^p P(X_i &#x3D; x_i)$；</li>
+<li>$p(x_1,x_2,\cdots,x_p) &#x3D; \prod_{i&#x3D;1}^p p(x_i)$。</li>
+</ol>
+<ul>
+<li>$X$与$Y$独立，指的是$X$发生与否与$Y$发生与否是无关的。</li>
+</ul>
+<h4 id="随机变量的数字特征"><a href="#随机变量的数字特征" class="headerlink" title="随机变量的数字特征"></a>随机变量的数字特征</h4><h5 id="期望"><a href="#期望" class="headerlink" title="期望"></a>期望</h5><ul>
+<li>衡量随机变量的平均水平。</li>
+<li>计算方式为<br>$$<br>E(X) &#x3D; \begin{cases}<br>\int_{-\infty}^{\infty} x p(x) \text{d}x, \text{$X$是连续随机变量}\<br>\sum_{x_i} x_i P(X&#x3D;x_i) , \text{$X$是离散随机变量}<br>\end{cases}<br>$$</li>
+<li>期望的性质：</li>
+</ul>
+<ol>
+<li>$E(aX) &#x3D; aE(X)$，$a$是一个常数。</li>
+<li>$E(a) &#x3D; a$，$a$是一个常数。</li>
+<li>$E(X+Y) &#x3D; E(X) + E(Y)$。</li>
+<li>若$X$和$Y$独立， 有$E(XY) &#x3D; E(X)E(Y)$。</li>
+</ol>
+<h5 id="方差"><a href="#方差" class="headerlink" title="方差"></a>方差</h5><ul>
+<li>衡量随机变量的波动情况。</li>
+<li>计算方式为<br>$$<br>Var(X) &#x3D; \begin{cases}<br>\int_{-\infty}^{\infty} (x-E(X))^2 p(x) \text{d}x, \text{$X$是连续随机变量}\<br>\sum_{x_i} (x_i-E(X))^2 P(X&#x3D;x_i) , \text{$X$是离散随机变量}<br>\end{cases}<br>$$</li>
+<li>方差的性质：</li>
+</ul>
+<ol>
+<li>$Var(X) &#x3D; E(X^2) - (E(X))^2$.</li>
+<li>$Var(aX+b) &#x3D; a^2E(X)$，$a$是一个常数。</li>
+<li>$Var(a) &#x3D; 0$，$a$是一个常数。</li>
+<li>切比雪夫不等式：$P(|X-E(X)|\geq \epsilon) \leq \frac{Var(X)}{\epsilon^2}$。</li>
+<li>若$X$和$Y$独立，有$Var(X\pm Y) &#x3D; Var(X) + Var(Y)$。</li>
+</ol>
+<h5 id="常见分布的期望与方差"><a href="#常见分布的期望与方差" class="headerlink" title="常见分布的期望与方差"></a>常见分布的期望与方差</h5><table width = 300>
+    <tr>
+        <td> 常见分布                  </td>
+        <td> 期望                      </td>
+        <td> 方差                      </td>
+    </tr>
+    <tr>
+        <td> $b(n,p)$                  </td>
+        <td> $np$                      </td>
+        <td> $np(1-p)$                 </td>
+    </tr>
+    <tr>
+        <td> $Nb(r,p)$                 </td>
+        <td> $r/p$                     </td>
+        <td> $r(1-p)/p^2$              </td>
+    </tr>
+    <tr>
+        <td> $P(\lambda)$              </td>
+        <td> $\lambda$                 </td>
+        <td> $\lambda$                 </td>
+    </tr>
+    <tr>
+        <td> $U(a,b)$                  </td>
+        <td> $(a+b)/2$                 </td>
+        <td> $(b-a)^2/12$              </td>
+    </tr>
+    <tr>
+        <td> $N(\mu,\sigma^2)$         </td>
+        <td> $\mu$                     </td>
+        <td> $\sigma^2$                </td>
+    </tr>
+    <tr>
+        <td> $Exp(\lambda)$            </td>
+        <td> $1/\lambda$               </td>
+        <td> $1/\lambda^2$             </td>
+    </tr>
+    <tr>
+        <td> $Ga(\alpha,\lambda)$      </td>
+        <td> $\alpha/\lambda$          </td>
+        <td> $\alpha/\lambda^2$        </td>
+    </tr>
+    <tr>
+        <td> $Be(a,b)$                 </td>
+        <td> $a/(a+b)$                 </td>
+        <td> $\frac{a(a+b)}{(a+b+1)^2(a+b+2)}$ </td>
+    </tr>
+</table>
+
+<h5 id="协方差与相关系数"><a href="#协方差与相关系数" class="headerlink" title="协方差与相关系数"></a>协方差与相关系数</h5><ul>
+<li><p>协方差：$Cov(X,Y) &#x3D; E(X-E(X))(Y-E(Y)) &#x3D; E(XY)- E(X)E(Y)$；</p>
+</li>
+<li><p>特例：$Cov(X,X) &#x3D; Var(X)$；</p>
+</li>
+<li><p>若$X$和$Y$独立，有$Cov(X,Y)&#x3D;0$；</p>
+</li>
+<li><p>$Var(X\pm Y) &#x3D; Var(X) + Var(Y) \pm 2 Cov(X,Y)$；</p>
+</li>
+<li><p>$Cov(X,Y) &#x3D; Cov(Y,X)$；</p>
+</li>
+<li><p>$Cov(X,a) &#x3D; 0$，$a$是一个常数；</p>
+</li>
+<li><p>$Cov(aX,bY) &#x3D; ab Cov(X,Y) $，$a,b$是常数；</p>
+</li>
+<li><p>$Cov(X+Y,Z) &#x3D; Cov(X,Z) + Cov(Y,Z)$。</p>
+</li>
+<li><p>相关系数为<br>$$<br>Corr(X,Y) &#x3D; \frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)}}.<br>$$</p>
+</li>
+<li><p>$-1 \leq Corr(X,Y)\leq 1$；</p>
+</li>
+<li><p>若$ Corr(X,Y)&gt;0$，则$X$和$Y$是正（线性）相关；</p>
+</li>
+<li><p>若$ Corr(X,Y)&lt;0$，则$X$和$Y$是负（线性）相关；</p>
+</li>
+<li><p>若$ Corr(X,Y)&#x3D;0$，则$X$和$Y$是不相关；</p>
+</li>
+</ul>
+<h5 id="分位数"><a href="#分位数" class="headerlink" title="分位数"></a>分位数</h5><ul>
+<li>$p$分位数定义为$x_p$满足$ p &#x3D; \int_{-\infty}^{x_p} p(x) \text{d}x$。</li>
+</ul>
+<h5 id="常见分布的分位数"><a href="#常见分布的分位数" class="headerlink" title="常见分布的分位数"></a>常见分布的分位数</h5><table width = 300>
+    <tr>
+        <td> 常见分布                  </td>
+        <td> 分位数                    </td>
+    </tr>
+    <tr>
+        <td> $N(0,1)$                 </td>
+        <td> $z_{p}$                  </td>
+    </tr>
+    <tr>
+        <td> $\chi^2(n)$               </td>
+        <td> $\chi^2_{p}(n)$           </td>
+    </tr>
+    <tr>
+        <td> $t(n)$                    </td>
+        <td> $t_{p}(n)$                </td>
+    </tr>
+     <tr>
+        <td> $F(m,n)$               </td>
+        <td> $F_{p}(m,n)$           </td>
+    </tr>
+</table>
+
+<h4 id="多元正态随机向量"><a href="#多元正态随机向量" class="headerlink" title="多元正态随机向量"></a>多元正态随机向量</h4><ul>
+<li>$\mathbf{X} \sim N_{p}(\mathbf{\mu},\Sigma)$；</li>
+<li>均值向量$\mathbf{\mu} &#x3D; (\mu_1,\mu_2,\cdots,\mu_p)’$，其中$\mu_{i} &#x3D; E(X_i)$；</li>
+<li>方差-协方差矩阵为<br>$$<br>Cov &#x3D; \left(<br>\begin{matrix}<br>Var(X_1) &amp; Cov(X_1,X_2) &amp; \cdots &amp; Cov(X_1,X_p)\<br>Cov(X_2,X_1) &amp; Var(X_2) &amp; \cdots &amp; Cov(X_2,X_p)\<br>\vdots &amp; \vdots &amp; &amp; \vdots \<br>Cov(X_p,X_1) &amp; Cov(X_p,X_2) &amp; \cdots &amp; Var(X_p)\<br>\end{matrix}<br>\right)<br>$$</li>
+<li>密度函数为<br>$$<br>p(\mathbf{x}) &#x3D; (2\pi)^{-p&#x2F;2} \det(\Sigma)^{-1&#x2F;2} \exp{ -(\mathbf{x} - \mathbf{\mu})’ \Sigma^{-1} (\mathbf{x} - \mathbf{\mu})&#x2F;2 }.<br>$$</li>
+</ul>
+<h4 id="重要定理"><a href="#重要定理" class="headerlink" title="重要定理"></a>重要定理</h4><p>若$x_1,x_2,\cdots,x_n$是来自于正态分布$N(\mu,\sigma^2)$的样本。我们可以证明</p>
+<ol>
+<li>样本均值$\bar{x} &#x3D; \frac{1}{n}\sum_{i&#x3D;1}^n x_i \sim N(\mu,\sigma^2&#x2F;n)$.</li>
+<li>样本方差$s^2 &#x3D; \frac{1}{n-1}\sum_{i&#x3D;1}^n (x_i-\bar{x})^2$ 满足$(n-1)s^2&#x2F;\sigma^2 \sim \chi^2(n-1)$.</li>
+<li>$\bar{x}$与$s^2$独立。</li>
+</ol>
+<h2 id="Part-Two：Estimation"><a href="#Part-Two：Estimation" class="headerlink" title="Part Two：Estimation"></a>Part Two：Estimation</h2><h3 id="点估计-（Point-Estimation）"><a href="#点估计-（Point-Estimation）" class="headerlink" title="点估计 （Point Estimation）"></a>点估计 （Point Estimation）</h3><ul>
+<li>估计的三种思想：</li>
+</ul>
+<ol>
+<li>替换</li>
+<li>似然</li>
+<li>拟合</li>
+</ol>
+<h4 id="最大似然估计"><a href="#最大似然估计" class="headerlink" title="最大似然估计"></a>最大似然估计</h4><ul>
+<li>似然函数&lt;&#x3D;&gt;联合密度函数<br>例：总体分布$X\sim N(\mu,\sigma^2)$。令参数$\theta &#x3D; (\mu,\sigma^2)’$。现有$x_1,x_2,\cdots,x_n$是样本。欲估计$\theta$。<br>我们可以定义似然函数为<br>$$<br>L(\theta) &#x3D; \prod_{i&#x3D;1}^n p(x_i) &#x3D; (2\pi\sigma^2)^{-n&#x2F;2} \exp{- \frac{1}{2\sigma^2} \sum_{i&#x3D;1}^n(x_i - \mu)^2 } .<br>$$<br>其对数似然函数为<br>$$<br>l(\theta) &#x3D; \ln L(\theta) &#x3D; -\frac{n}{2}\ln(2\pi) -\frac{n}{2} \ln (\sigma^2) - \frac{1}{2\sigma^2} \sum_{i&#x3D;1}^n(x_i - \mu)^2.<br>$$<br>关于$\mu$和$\sigma^2$分别求偏导，即<br>$$<br>\frac{\partial l}{\partial \mu} &#x3D; \frac{1}{\sigma^2} \sum_{i&#x3D;1}^n(x_i - \mu) &#x3D; 0,<br>$$</li>
+</ul>
+<p>$$<br>\frac{\partial l}{\partial \sigma^2} &#x3D; - \frac{n&#x2F;2}{\sigma^2} + \frac{1}{2\sigma^4} \sum_{i&#x3D;1}^n(x_i - \mu)^2&#x3D; 0.<br>$$</p>
+<p>于是，我们可以得到最大似然估计为<br>$$<br>\hat{\mu} &#x3D; \bar{x}, \hat{\sigma}^2 &#x3D; s_n^2 &#x3D; \frac{1}{n}\sum_{i&#x3D;1}^n (x_i-\bar{x})^2.<br>$$</p>
+<h3 id="区间估计（Interval-Estimation）"><a href="#区间估计（Interval-Estimation）" class="headerlink" title="区间估计（Interval Estimation）"></a>区间估计（Interval Estimation）</h3><h4 id="枢轴量法"><a href="#枢轴量法" class="headerlink" title="枢轴量法"></a>枢轴量法</h4><p>例：现有$x_1,x_2,\cdots,x_n\sim N(\mu,\sigma^2)$。欲给出$\mu$置信水平为$1-\alpha$的置信区间。</p>
+<ol>
+<li>如果$\sigma^2$已知，我们记$\sigma^2 &#x3D;\sigma^2_0 $。</li>
+</ol>
+<ul>
+<li>点估计：$\hat{\mu} &#x3D; \bar{x}$；</li>
+<li>分布：$\bar{x} \sim N(\mu,\sigma_0^2&#x2F;n)$；</li>
+<li>标准化：$\frac{\hat{\mu}-\mu}{\sqrt{\sigma_0^2&#x2F;n}} \sim N(0,1)$；这里$\frac{\hat{\mu}-\mu}{\sqrt{\sigma_0^2&#x2F;n}}$就是所定义的枢轴量；</li>
+<li>可以确定c_1,c_2分别为$\pm z_{1-\alpha&#x2F;2}$使得<br>$$<br>P(c_1\leq \frac{\hat{\mu}-\mu}{\sqrt{\sigma_0^2&#x2F;n}}\leq c_2) &#x3D; 1-\alpha<br>$$</li>
+<li>关注这个区间${-z_{1-\alpha&#x2F;2} \leq \frac{\bar{x}-\mu}{\sqrt{\sigma_0^2&#x2F;n}}\leq z_{1-\alpha&#x2F;2}}$可以转化为<br>$$<br>\bar{x} - z_{1-\alpha&#x2F;2} \sqrt{\sigma_0^2&#x2F;n}\leq \mu \leq \bar{x} +z_{1-\alpha&#x2F;2} \sqrt{\sigma_0^2&#x2F;n}.<br>$$</li>
+</ul>
+<ol start="2">
+<li><ol>
+<li>如果$\sigma^2$未知，我们如何得到区间估计？</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>点估计：$\hat{\mu} &#x3D; \bar{x}$；</li>
+<li>分布：$\bar{x} \sim N(\mu,\sigma_0^2&#x2F;n)$；</li>
+<li>标准化：$\frac{\hat{\mu}-\mu}{\sqrt{\sigma_0^2&#x2F;n}} \sim N(0,1)$；</li>
+<li>因为$\sigma^2$未知，我们用$\hat{\sigma}^2$代替$\sigma^2$，即枢轴量为<br>$$<br>G &#x3D; $\frac{\hat{\mu}-\mu}{\sqrt{\hat{\sigma}^2&#x2F;n}} \sim t(n-1)$<br>$$</li>
+<li>可以确定c_1,c_2分别为$\pm t_{1-\alpha&#x2F;2}(n-1)$使得<br>$$<br>P(c_1\leq \frac{\hat{\mu}-\mu}{\sqrt{\sigma_0^2&#x2F;n}}\leq c_2) &#x3D; 1-\alpha<br>$$</li>
+<li>关注这个区间${-t_{1-\alpha&#x2F;2}(n-1)\leq \frac{\bar{x}-\mu}{\sqrt{\sigma_0^2&#x2F;n}}\leq t_{1-\alpha&#x2F;2}(n-1)}$可以转化为<br>$$<br>\bar{x} - t_{1-\alpha&#x2F;2}(n-1) \sqrt{\sigma_0^2&#x2F;n}\leq \mu \leq \bar{x} +t_{1-\alpha&#x2F;2}(n-1) \sqrt{\sigma_0^2&#x2F;n}.<br>$$</li>
+</ul>
+<h2 id="Part-Three：Hypothesis-Testing"><a href="#Part-Three：Hypothesis-Testing" class="headerlink" title="Part Three：Hypothesis Testing"></a>Part Three：Hypothesis Testing</h2><p>这里我们考虑正态总体分布的参数假设检验。</p>
+<h3 id="单个正态分布"><a href="#单个正态分布" class="headerlink" title="单个正态分布"></a>单个正态分布</h3><p>背景问题：研究大厂的程序员的平均年龄是否不大于35岁？</p>
+<p>例：$x_1,x_2,\cdots,x_n \sim N(\mu,\sigma^2)$。</p>
+<ol>
+<li>如果$\sigma^2$已知。欲检验<br>$$<br>H_0: \mu &#x3D; \mu_0 \quad \text{vs} \quad H_1: \mu&gt; \mu_0.<br>$$<br>我们希望构造的拒绝域为$W &#x3D; {\bar{x} &gt; c}$。接下来，我们的核心问题是$c$是多少？考虑在原假设成立时，$P(\bar{x}&gt;c|H_0) \leq \alpha$。当原假设成立时，<br>$$<br>\bar{x} \sim N(0,\sigma^2).<br>$$<br>那么这个概率<br>$$<br>\alpha\geq P(\bar{x}&gt;c|H_0) &#x3D; P(\bar{x}&#x2F;\sqrt{\sigma^2&#x2F;n}&gt;c&#x2F;\sqrt{\sigma^2&#x2F;n}) &#x3D; 1- \Phi(c&#x2F;\sqrt{\sigma^2&#x2F;n})<br>$$<br>于是，$c &#x3D; z_{1-\alpha} \sqrt{\sigma^2&#x2F;n}$。所以，拒绝域为$W &#x3D; {\bar{x} &gt;   z_{1-\alpha} \sqrt{\sigma^2&#x2F;n}} &#x3D; {\bar{x}&#x2F;\sqrt{\sigma^2&#x2F;n} &gt;z_{1-\alpha}  }$。这里$\bar{x}&#x2F;\sqrt{\sigma^2&#x2F;n}$是检验统计量。</li>
+<li>如果$\sigma^2$未知。欲检验<br>$$<br>H_0: \mu \leq \mu_0 \quad \text{vs} \quad H_1: \mu&gt; \mu_0.<br>$$<br>检验统计量为$\bar{x}&#x2F;\sqrt{\hat{\sigma}^2&#x2F;n}$，其拒绝域为${\bar{x}&#x2F;\sqrt{\hat{\sigma}^2&#x2F;n} &gt;t_{1-\alpha}(n-1)  }$</li>
+<li>如果$\sigma^2$未知。欲检验<br>$$<br>H_0: \mu &#x3D; \mu_0 \quad \text{vs} \quad H_1: \mu \neq \mu_0.<br>$$<br>检验统计量为$\bar{x}&#x2F;\sqrt{\hat{\sigma}^2&#x2F;n}$，其拒绝域为${\left|\bar{x}&#x2F;\sqrt{\hat{\sigma}^2&#x2F;n}\right| &gt;t_{1-\alpha&#x2F;2}(n-1) }$</li>
+</ol>
+<ul>
+<li>$p$值是当前样本及其更极端情况发生的概率。当$p&lt;\alpha$，则拒绝原假设。</li>
+</ul>
+<h3 id="两个正态分布"><a href="#两个正态分布" class="headerlink" title="两个正态分布"></a>两个正态分布</h3><p>例：有两个独立样本$x_1,x_2,\cdots,x_m \sim N(\mu_1,\sigma^2)$和$y_1,y_2,\cdots,y_n \sim N(\mu_2,\sigma^2)$。这里$\sigma^2$未知。<br>令$\theta &#x3D; \mu_1- \mu2$。欲检验<br>$$<br>H_0: \theta &#x3D; 0 \quad \text{vs} \quad H_1: \theta \neq 0.<br>$$<br>检验统计量为<br>$$<br>t &#x3D; \frac{\bar{x} - \bar{y}}{\sqrt{s_w^2 (1&#x2F;m+1&#x2F;n)}} .<br>$$<br>其拒绝域为 ${|t| &gt; t_{1-\alpha&#x2F;2}(m+n-2)}$.</p>
+<ul>
+<li>假设检验与区间估计是相对应的。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/huawei-obs/" rel="prev" title="华为对象云存储OBS开发记录">
+      <i class="fa fa-chevron-left"></i> 华为对象云存储OBS开发记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/cpp-project-build-tutorial/" rel="next" title="C/C++项目构建教程">
+      C/C++项目构建教程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Tutorial-Zero-Preliminaries"><span class="nav-number">1.</span> <span class="nav-text">Tutorial Zero: Preliminaries</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-One%EF%BC%9AStatistics-and-Sampling-Distribution"><span class="nav-number">1.1.</span> <span class="nav-text">Part One：Statistics and Sampling Distribution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.</span> <span class="nav-text">随机变量的定义及常见分布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">随机变量的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">随机变量的表示方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E4%B8%80%E5%85%83%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">常见的一元随机变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%8C%E9%A1%B9%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.1.</span> <span class="nav-text">二项分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B4%9F%E4%BA%8C%E9%A1%B9%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.2.</span> <span class="nav-text">负二项分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%8A%E6%9D%BE%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.3.</span> <span class="nav-text">泊松分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9D%87%E5%8C%80%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.4.</span> <span class="nav-text">均匀分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.5.</span> <span class="nav-text">正态分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%A1%E6%96%B9%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.6.</span> <span class="nav-text">卡方分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#F-%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.7.</span> <span class="nav-text">$F$分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#t-%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.8.</span> <span class="nav-text">$t$分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.9.</span> <span class="nav-text">指数分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Gamma-%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.10.</span> <span class="nav-text">Gamma 分布</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Beta-%E5%88%86%E5%B8%83"><span class="nav-number">1.1.1.3.11.</span> <span class="nav-text">Beta 分布</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%90%91%E9%87%8F"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">随机向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E6%95%B0%E5%AD%97%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">随机变量的数字特征</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B"><span class="nav-number">1.1.1.5.1.</span> <span class="nav-text">期望</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE"><span class="nav-number">1.1.1.5.2.</span> <span class="nav-text">方差</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E7%9A%84%E6%9C%9F%E6%9C%9B%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-number">1.1.1.5.3.</span> <span class="nav-text">常见分布的期望与方差</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE%E4%B8%8E%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0"><span class="nav-number">1.1.1.5.4.</span> <span class="nav-text">协方差与相关系数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E4%BD%8D%E6%95%B0"><span class="nav-number">1.1.1.5.5.</span> <span class="nav-text">分位数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E7%9A%84%E5%88%86%E4%BD%8D%E6%95%B0"><span class="nav-number">1.1.1.5.6.</span> <span class="nav-text">常见分布的分位数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E6%AD%A3%E6%80%81%E9%9A%8F%E6%9C%BA%E5%90%91%E9%87%8F"><span class="nav-number">1.1.1.6.</span> <span class="nav-text">多元正态随机向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%AE%9A%E7%90%86"><span class="nav-number">1.1.1.7.</span> <span class="nav-text">重要定理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-Two%EF%BC%9AEstimation"><span class="nav-number">1.2.</span> <span class="nav-text">Part Two：Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E4%BC%B0%E8%AE%A1-%EF%BC%88Point-Estimation%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">点估计 （Point Estimation）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">最大似然估计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1%EF%BC%88Interval-Estimation%EF%BC%89"><span class="nav-number">1.2.2.</span> <span class="nav-text">区间估计（Interval Estimation）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%A2%E8%BD%B4%E9%87%8F%E6%B3%95"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">枢轴量法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-Three%EF%BC%9AHypothesis-Testing"><span class="nav-number">1.3.</span> <span class="nav-text">Part Three：Hypothesis Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83"><span class="nav-number">1.3.1.</span> <span class="nav-text">单个正态分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83"><span class="nav-number">1.3.2.</span> <span class="nav-text">两个正态分布</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">sitJac</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sitJac</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

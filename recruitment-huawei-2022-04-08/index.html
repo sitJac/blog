@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <script type="text/javascript" src="https://unpkg.com/minigrid@3.1.1/dist/minigrid.min.js"></script>
+  <link rel="stylesheet" href="/photos/photos.css">
+  <script type="text/javascript" src="/photos/photo.js"></script>
+
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sitjac.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="第一题考察模拟：涉及到对实际问题或过程的计算机算法模拟。 第二题是DFS在二维网格上的应用：岛屿的最大面积、连通区域的最大面积等经典题目的变体，主要考察对DFS算法和二维网格操作的理解。 第三题是一维动态规划：DP中经典问题跳跃游戏的一个变种，考察DP的基本知识点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="华为2022校园招聘软件专业类4.08-机试题三道">
+<meta property="og:url" content="https://sitjac.github.io/recruitment-huawei-2022-04-08/index.html">
+<meta property="og:site_name" content="sitJac&#39;s Blog">
+<meta property="og:description" content="第一题考察模拟：涉及到对实际问题或过程的计算机算法模拟。 第二题是DFS在二维网格上的应用：岛屿的最大面积、连通区域的最大面积等经典题目的变体，主要考察对DFS算法和二维网格操作的理解。 第三题是一维动态规划：DP中经典问题跳跃游戏的一个变种，考察DP的基本知识点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-08T14:48:36.000Z">
+<meta property="article:modified_time" content="2024-05-08T14:53:20.323Z">
+<meta property="article:author" content="sitJac">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sitjac.github.io/recruitment-huawei-2022-04-08/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>华为2022校园招聘软件专业类4.08-机试题三道 | sitJac's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sitJac's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://sitjac.github.io/recruitment-huawei-2022-04-08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="sitJac">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sitJac's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          华为2022校园招聘软件专业类4.08-机试题三道
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-04-08 22:48:36" itemprop="dateCreated datePublished" datetime="2022-04-08T22:48:36+08:00">2022-04-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/Offer/" itemprop="url" rel="index"><span itemprop="name">Offer</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="note info">
+
+<ul>
+<li>第一题考察模拟：涉及到对实际问题或过程的计算机算法模拟。</li>
+<li>第二题是DFS在二维网格上的应用：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/max-area-of-island">岛屿的最大面积</a>、连通区域的最大面积等经典题目的变体，主要考察对DFS算法和二维网格操作的理解。</li>
+<li>第三题是一维动态规划：DP中经典问题<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/jump-game-ii">跳跃游戏</a>的一个变种，考察DP的基本知识点。</li>
+</ul>
+</div>
+
+<span id="more"></span>
+
+<h4 id="第一题（100）"><a href="#第一题（100）" class="headerlink" title="第一题（100）"></a>第一题（100）</h4><p>给出多个房间编号，两个房间之间存在单向门，根据单向门输出只能进不能出的房间编号，有且仅有一个只能进不能出的房间。</p>
+<p>输入描述：</p>
+<blockquote>
+<p>1.第一行是单向门的数量N。<br>2.第二行开始的N行，是使用空格分隔的两个房间号，代表一个单向门。</p>
+<p>说明：<br>1 &lt;&#x3D; 单向门数量 &lt;&#x3D; 100<br>房间号为int类型数字</p>
+</blockquote>
+<p>输出描述：</p>
+<blockquote>
+<p>房间的编号</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#输出只进不出的唯一的一个门🚪</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Input:</span></span><br><span class="line"><span class="string">5</span></span><br><span class="line"><span class="string">1 2</span></span><br><span class="line"><span class="string">2 3</span></span><br><span class="line"><span class="string">3 4</span></span><br><span class="line"><span class="string">2 5</span></span><br><span class="line"><span class="string">5 4</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Output:</span></span><br><span class="line"><span class="string">4</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">n = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line">from_list = []</span><br><span class="line">to_list = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    a, b = <span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())</span><br><span class="line">    from_list.append(a)</span><br><span class="line">    to_list.append(b)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> to_list:</span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> from_list:</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="第二题（200）"><a href="#第二题（200）" class="headerlink" title="第二题（200）"></a>第二题（200）</h4><p>给定一个二维数组，每个元素代表地形的高度。山体是由连续的、高度大于0的格子组成的，每个山体的体积是其包含的所有格子的高度之和。请找出体积最大的山体。</p>
+<p>输入描述：</p>
+<blockquote>
+<p>第一行包含两个整数n和m，表示二维数组的行数和列数（1 &lt;&#x3D; n, m &lt;&#x3D; 1000）。 接下来的n行，每行包含m个整数，表示地形的高度（0 &lt;&#x3D; 高度 &lt;&#x3D; 1000）。</p>
+</blockquote>
+<p>输出描述：</p>
+<blockquote>
+<p>输出一个整数，表示体积最大的山体的体积。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 岛屿的最大山体体积 dfs</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">5 5</span></span><br><span class="line"><span class="comment">0 1 1 0 0</span></span><br><span class="line"><span class="comment">0 1 1 0 0</span></span><br><span class="line"><span class="comment">0 0 0 0 0</span></span><br><span class="line"><span class="comment">0 0 1 2 3</span></span><br><span class="line"><span class="comment">0 0 1 3 9</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">19</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="type">int</span> grid[<span class="number">1005</span>][<span class="number">1005</span>];</span><br><span class="line"><span class="type">bool</span> visited[<span class="number">1005</span>][<span class="number">1005</span>];</span><br><span class="line"><span class="type">int</span> dx[<span class="number">4</span>] = &#123;<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line"><span class="type">int</span> dy[<span class="number">4</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    visited[x][y] = <span class="literal">true</span>;</span><br><span class="line">    <span class="type">int</span> volume = grid[x][y];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        <span class="type">int</span> nx = x + dx[i], ny = y + dy[i];</span><br><span class="line">        <span class="keyword">if</span>(nx &gt;= <span class="number">0</span> &amp;&amp; nx &lt; n &amp;&amp; ny &gt;= <span class="number">0</span> &amp;&amp; ny &lt; m &amp;&amp; grid[nx][ny] &gt; <span class="number">0</span> &amp;&amp; !visited[nx][ny]) &#123;</span><br><span class="line">            volume += <span class="built_in">dfs</span>(nx, ny);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> volume;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            cin &gt;&gt; grid[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> maxVolume = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(grid[i][j] &gt; <span class="number">0</span> &amp;&amp; !visited[i][j]) &#123;</span><br><span class="line">                maxVolume = <span class="built_in">max</span>(maxVolume, <span class="built_in">dfs</span>(i, j));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; maxVolume &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三道（300）"><a href="#第三道（300）" class="headerlink" title="第三道（300）"></a>第三道（300）</h4><p>原题：大致是在讲给出一些网络传输设备，每台设备都有其能传输数据的最大传输距离，问从第一台设备传输数据到最后一台数据所用到的最少中转次数为多少。</p>
+<p>翻译：给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。你的目标是使用最少的跳跃次数到达数组的最后一个位置。</p>
+<p>输入描述：</p>
+<blockquote>
+<p>第入参通过多行字符串方式表示，例如：<br>4<br>2 3 1 1<br>字符串含义：<br>1.第一行表示总共中转设备台数：总计4台<br>2.第二行表述中转设备的最大传输能力：第一台设备最大传输距离为2km，第二胎设备最大传输距离为3km，第三台设备最大传输距离为1km，第四台设备最大传输距离为1km。</p>
+</blockquote>
+<p>输出描述：</p>
+<blockquote>
+<p>2<br>解释：<br>数据从第一台设备中转到第三台设备，再从第三台设备中转到第四台设备，传输结束，中共需中转2次。</p>
+</blockquote>
+<p>解题思路：</p>
+<blockquote>
+<p>这个题目主要考察的是动态规划的知识点。<br>在这个问题中，我们使用一个动态规划数组dp，其中dp[i]表示从位置i跳跃到数组的最后一个位置的最少跳跃次数。<br>我们从数组的倒数第二个位置开始，向前遍历，对于每个位置，如果它可以一步跳到最后一个位置，那么dp[i]就是1，否则，dp[i]就是它可以跳到的所有位置的dp值加1的最小值。<br>最后，dp[0]就是我们要求的答案。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LeetCode 45.跳跃游戏（Jump Game Ⅱ）的一个变种题目</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Input:</span></span><br><span class="line"><span class="comment">4</span></span><br><span class="line"><span class="comment">2 3 1 1</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Output:</span></span><br><span class="line"><span class="comment">2</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">1000</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> a[MAXN];</span><br><span class="line"><span class="type">int</span> dp[MAXN];   <span class="comment">//dp[i]表示以i为开始到达最后一个节点的最小步数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//初始化</span></span><br><span class="line">    dp[n<span class="number">-1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//遍历顺序</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = n - <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">        <span class="comment">//递推公式</span></span><br><span class="line">        <span class="keyword">if</span>(n<span class="number">-1</span>-i &lt;= a[i])&#123;  <span class="comment">//当前位置一步就可以到达最后一个节点</span></span><br><span class="line">            dp[i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;   <span class="comment">//当前位置无法一步到达最后一个节点 此时需要遍历求得最小的步数</span></span><br><span class="line">            <span class="type">int</span> min_temp = <span class="number">10000</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= a[i]; j++)&#123;</span><br><span class="line">                <span class="type">int</span> temp = dp[i + j] + <span class="number">1</span>;</span><br><span class="line">                min_temp = <span class="built_in">min</span>(min_temp, temp);</span><br><span class="line">            &#125;</span><br><span class="line">            dp[i] = min_temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//打印输出目标dp</span></span><br><span class="line">    cout &lt;&lt; dp[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/ecnu-dase-postgraduate-entrance-exam-contest/" rel="prev" title="ECNU Dase Postgraduate Entrance Examination">
+      <i class="fa fa-chevron-left"></i> ECNU Dase Postgraduate Entrance Examination
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/recruitment-bytedance-2022-04-10/" rel="next" title="字节跳动2022春招研发笔试第六场4.10-算法方向">
+      字节跳动2022春招研发笔试第六场4.10-算法方向 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%A2%98%EF%BC%88100%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">第一题（100）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%A2%98%EF%BC%88200%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">第二题（200）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%81%93%EF%BC%88300%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">第三道（300）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">sitJac</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sitJac</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

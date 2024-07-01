@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <script type="text/javascript" src="https://unpkg.com/minigrid@3.1.1/dist/minigrid.min.js"></script>
+  <link rel="stylesheet" href="/photos/photos.css">
+  <script type="text/javascript" src="/photos/photo.js"></script>
+
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sitjac.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文围绕 C++ 的Syntax, Data Structures, Algorithms以及STL和相关高频应用进行集中攻克，既能提升在 C++ 面试前的准备效率，也能提前把握实际工作中的 C++ 要点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Cheat Sheet">
+<meta property="og:url" content="https://sitjac.github.io/cpp-cheat-sheet/index.html">
+<meta property="og:site_name" content="sitJac&#39;s Blog">
+<meta property="og:description" content="本文围绕 C++ 的Syntax, Data Structures, Algorithms以及STL和相关高频应用进行集中攻克，既能提升在 C++ 面试前的准备效率，也能提前把握实际工作中的 C++ 要点。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-21T12:33:00.000Z">
+<meta property="article:modified_time" content="2024-05-08T14:53:20.311Z">
+<meta property="article:author" content="sitJac">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sitjac.github.io/cpp-cheat-sheet/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ Cheat Sheet | sitJac's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sitJac's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://sitjac.github.io/cpp-cheat-sheet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="sitJac">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sitJac's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Cheat Sheet
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-21 20:33:00" itemprop="dateCreated datePublished" datetime="2022-03-21T20:33:00+08:00">2022-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="note info">
+
+<p>本文围绕 C++ 的Syntax, Data Structures, Algorithms以及STL和相关高频应用进行集中攻克，既能提升在 C++ 面试前的准备效率，也能提前把握实际工作中的 C++ 要点。</p>
+</div>
+
+<span id="more"></span>
+
+<p>C++ STL（标准模板库）<br>是一套C++模板类，提供通用的模板类和函数<br>容器-Containers：用于管理某一类对象的集合<br>算法-Algorithms：作用于容器，提供了执行各种操作的方式<br>迭代器-Iterators：用于遍历对象集合的元素<br>向量 Vector：能够存放任意类型的动态数组<br>1.顺序序列：元素按线性顺序排序；可通过元素在序列中的位置访问对应的元素<br>2.动态数组：对序列中任意元素进行快速直接访问；提供在序列末尾相对快速地添加&#x2F;删除元素<br>C++中两种输入输出方式：<br>cin、cout；效率低；因为输出时将内容先放入缓冲区再输出<br>使用ios::sync_with_stdio(false);使内容不在缓存直接输出</p>
+<h2 id="1-main综合模板"><a href="#1-main综合模板" class="headerlink" title="1.main综合模板"></a>1.main综合模板</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span>         <span class="comment">//C++中输入输出函数 cout endl 等</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span>          <span class="comment">//string相关函数操作</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span>          <span class="comment">//C语言输入输出函数 printf scanf 等</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span>         <span class="comment">//C语言string操作函数 strlen strcmp等</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span>         <span class="comment">//标准C库函数</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span>          <span class="comment">//文件流操作</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;math.h&gt;</span>           <span class="comment">//标准数学函数  max  min  pow等</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span>           <span class="comment">//向量(vector) 容器</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span>            <span class="comment">//队列(FIFO)  容器</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span>            <span class="comment">//堆(STACK) 容器</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span>        <span class="comment">//向量vector排序sort  反转reverse 等函数</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_set&gt;</span>    <span class="comment">//字典相关</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span>              <span class="comment">//hashmap容器</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-数组排序库"><a href="#2-数组排序库" class="headerlink" title="2.数组排序库"></a>2.数组排序库</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">5</span>] = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="built_in">sort</span>(a, a + <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-字符串库"><a href="#3-字符串库" class="headerlink" title="3.字符串库"></a>3.字符串库</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">string s;</span><br><span class="line"><span class="type">int</span> pos = s.<span class="built_in">find</span>(<span class="string">&quot;afsd&quot;</span>); 	    <span class="comment">//在s串中查找指定串, 返回值为查找的串在string中的首部索引 没有找到的话返回 string::npos</span></span><br><span class="line"><span class="type">int</span> pos = s.<span class="built_in">find</span>(<span class="string">&quot;afsd&quot;</span>, <span class="number">5</span>)     <span class="comment">//从字符串s 下标5开始，查找字符串b ,返回b 在s 中的索引</span></span><br><span class="line">string s2 = s.<span class="built_in">substr</span>(<span class="number">2</span>, <span class="number">5</span>);     <span class="comment">//substr(startPosition,lenth)</span></span><br><span class="line">string s2 = s.<span class="built_in">substr</span>(<span class="number">2</span>);        <span class="comment">//截取从[2,string::npos)  从当前索引到string结尾</span></span><br><span class="line"><span class="type">int</span> = <span class="built_in">atoi</span>(s.<span class="built_in">c_str</span>());          <span class="comment">//将字符串转化为整数</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-向量vector的基本用法"><a href="#4-向量vector的基本用法" class="headerlink" title="4.向量vector的基本用法"></a>4.向量vector的基本用法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt; s;                  <span class="comment">//向量是一串数据组</span></span><br><span class="line">s.<span class="built_in">pop_back</span>();                   <span class="comment">//弹出向量的尾部元素，并不反悔任何值</span></span><br><span class="line">s.<span class="built_in">push_back</span>(&lt;<span class="type">int</span>&gt;);             <span class="comment">//压入新的元素到向量的尾部</span></span><br><span class="line"><span class="type">int</span> = s.<span class="built_in">size</span>();                 <span class="comment">//反回栈的大小</span></span><br><span class="line"><span class="type">bool</span> = s.<span class="built_in">empty</span>();               <span class="comment">//判断向量是否为空 如果为空，返回true</span></span><br><span class="line">&lt;<span class="type">int</span>&gt; = s.<span class="built_in">front</span>();              <span class="comment">//访问向量最前的元素</span></span><br><span class="line">&lt;<span class="type">int</span>&gt; = s.<span class="built_in">back</span>();               <span class="comment">//访问向量最后的元素</span></span><br><span class="line">s.<span class="built_in">clear</span>();                      <span class="comment">//清空整个向量</span></span><br><span class="line">s.<span class="built_in">insert</span>( s.<span class="built_in">begin</span>() + n, &lt;<span class="type">int</span>&gt;);    <span class="comment">//在向量中第n个索引元素前插入&lt;int&gt;</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; s2;</span><br><span class="line">s.<span class="built_in">insert</span>( s.<span class="built_in">begin</span>() + n, s2.<span class="built_in">begin</span>(), s2.<span class="built_in">end</span>());    <span class="comment">//在向量中第n个索引元素前插入同类的s2向量</span></span><br><span class="line">s.<span class="built_in">erase</span>(s.<span class="built_in">begin</span>() + n);         <span class="comment">//删除向量中的第n个索引元素</span></span><br><span class="line">s.<span class="built_in">erase</span>(s.<span class="built_in">begin</span>() + n, s.<span class="built_in">begin</span>() + m);     <span class="comment">//删除向量中的[n,m)区间的元素</span></span><br><span class="line"><span class="built_in">find</span>(s.<span class="built_in">begin</span>(), s.<span class="built_in">end</span>(), <span class="type">int</span>) == s.<span class="built_in">end</span>();  <span class="comment">//在vector s中查找是否有某个元素，如果有，返回指针类型 vector&lt;int&gt;::iterator</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-vector初始化"><a href="#5-vector初始化" class="headerlink" title="5.vector初始化"></a>5.vector初始化</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a[<span class="number">5</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">s</span><span class="params">(a, a+<span class="number">5</span>)</span></span>;  <span class="comment">//将数组元素初始化为vector中的元素</span></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">s</span>(a, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(b));   <span class="comment">//创建s[a][b]大小的二维向量</span></span><br><span class="line"></span><br><span class="line"><span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v1</span><span class="params">(<span class="number">3</span>)</span></span>;                                 <span class="comment">// 1. Create a vector v1 with 3 elements of default value 0  </span></span><br><span class="line"><span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v2</span><span class="params">(<span class="number">5</span>, <span class="number">2</span>)</span></span>;                              <span class="comment">// 2. Create a vector v2 with 5 elements of value 2  </span></span><br><span class="line"><span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v3</span><span class="params">(<span class="number">3</span>, <span class="number">1</span>, v2.get_allocator())</span></span>;          <span class="comment">// 3. Create a vector v3 with 3 elements of value 1 and with the allocator of vector v2  </span></span><br><span class="line"><span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v4</span><span class="params">(v2)</span></span>;                                <span class="comment">// 4. Create a copy, vector v4, of vector v2  </span></span><br><span class="line"><span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v5</span><span class="params">(v4.begin() + <span class="number">1</span>, v4.begin() + <span class="number">3</span>)</span></span>;    <span class="comment">// 5. Create a vector v5 by copying the range v4[_First, _Last) </span></span><br></pre></td></tr></table></figure>
+<h2 id="6-Vector排序"><a href="#6-Vector排序" class="headerlink" title="6.Vector排序"></a>6.Vector排序</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意包含头文件#include &lt;algorithm&gt;</span></span><br><span class="line"><span class="built_in">sort</span>(s.<span class="built_in">begin</span>(), s.<span class="built_in">end</span>());   <span class="comment">//默认升序排列</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">sortFun</span><span class="params">(<span class="type">int</span> &amp; x, <span class="type">int</span> &amp; y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x &lt; y;   <span class="comment">//升序排列</span></span><br><span class="line">    <span class="comment">//return x &gt; y;	//降序排列</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">sort</span>(num.<span class="built_in">begin</span>(), num.<span class="built_in">end</span>(), sortFun);  <span class="comment">//按照sortFun制定的规则排序</span></span><br><span class="line"><span class="built_in">reverse</span>(s.<span class="built_in">begin</span>(), s.<span class="built_in">end</span>());            <span class="comment">//颠倒vector s中的所有元素，倒序</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="7-栈queue的基本用法"><a href="#7-栈queue的基本用法" class="headerlink" title="7.栈queue的基本用法"></a>7.栈queue的基本用法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">queue&lt;<span class="type">int</span>&gt; s;   <span class="comment">//栈是先入先出的FIFO</span></span><br><span class="line">s.<span class="built_in">front</span>();      <span class="comment">//栈首元素  只能通过front 和 back 接口访问首尾元素，无法访问中间元素</span></span><br><span class="line">s.<span class="built_in">back</span>();       <span class="comment">//栈尾元素</span></span><br><span class="line">s.<span class="built_in">pop</span>();        <span class="comment">//弹出栈的首元素</span></span><br><span class="line">s.<span class="built_in">push</span>();       <span class="comment">//压入新的元素</span></span><br><span class="line">s.<span class="built_in">size</span>();       <span class="comment">//反回栈的大小</span></span><br><span class="line">s.<span class="built_in">empty</span>();      <span class="comment">//判断queue是否为空</span></span><br><span class="line">s = <span class="built_in">queue</span>&lt;<span class="type">int</span>&gt;();   <span class="comment">//清空栈，通过赋值空栈的方式清空</span></span><br></pre></td></tr></table></figure>
+<h2 id="8-堆stack的基本用法"><a href="#8-堆stack的基本用法" class="headerlink" title="8.堆stack的基本用法"></a>8.堆stack的基本用法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">stack&lt;<span class="type">int</span>&gt; s;   <span class="comment">//堆是后入先出  </span></span><br><span class="line">s.<span class="built_in">top</span>();        <span class="comment">//堆顶元素  只能使用top访问顶部元素 无法访问中间元素</span></span><br><span class="line">s.<span class="built_in">pop</span>();        <span class="comment">//弹出堆的顶元素，并不反回任何值，仅弹出元素</span></span><br><span class="line">s.<span class="built_in">push</span>();       <span class="comment">//压入新的元素</span></span><br><span class="line">s.<span class="built_in">size</span>();       <span class="comment">//反回栈的大小</span></span><br><span class="line">s.<span class="built_in">empty</span>();      <span class="comment">//判断堆是否为空</span></span><br></pre></td></tr></table></figure>
+<h2 id="9-hashmap的基本用法-构建一一映射的关系"><a href="#9-hashmap的基本用法-构建一一映射的关系" class="headerlink" title="9.hashmap的基本用法(构建一一映射的关系)"></a>9.hashmap的基本用法(构建一一映射的关系)</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">map&lt;k, v&gt; m;	    <span class="comment">//定义了一个名为m的空的map对象 其中的key为k 值为v</span></span><br><span class="line"><span class="function">map&lt;k, v&gt; <span class="title">m2</span><span class="params">(m)</span></span>;    <span class="comment">//创建了m的副本m2</span></span><br><span class="line"><span class="function">map&lt;k, v&gt; <span class="title">m3</span><span class="params">(m.begin() + b, m.begin() + e)</span></span>; <span class="comment">//创建了map对象m3，并且存储迭代器b和e范围内的所有元素的副本</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//例： </span></span><br><span class="line">map&lt;string , <span class="type">int</span>&gt; m;  <span class="comment">//key为一个string 值为一个int</span></span><br><span class="line">m[<span class="string">&quot;ABC&quot;</span>] = <span class="number">123</span>;       <span class="comment">//在m中创建了一个映射关系 通过key值 &quot;ABC&quot; 可查找到int值 123   注意：使用key值访问一个不存在的元素将会创建新元素</span></span><br><span class="line">m[<span class="string">&quot;DEF&quot;</span>] = <span class="number">456</span>;       <span class="comment">//在m中创建了一个映射关系 通过key值 &quot;DEF&quot; 可查找到int值 456   注意：使用key值访问一个已存在的元素将会覆盖原元素</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//插入值：</span></span><br><span class="line">m.<span class="built_in">insert</span>(<span class="built_in">pair</span>&lt;string, <span class="type">int</span>&gt;(<span class="string">&quot;GHI&quot;</span>, <span class="number">789</span>));            <span class="comment">//与m[&quot;GHI&quot;] = 789;等效</span></span><br><span class="line">m.<span class="built_in">insert</span>(m.<span class="built_in">begin</span>() ,<span class="built_in">pair</span>&lt;string, <span class="type">int</span>&gt;(<span class="string">&quot;GHI&quot;</span>, <span class="number">789</span>)); <span class="comment">//在m的首部插入值</span></span><br><span class="line">m.<span class="built_in">insert</span>(&#123; &#123;<span class="string">&quot;ABC&quot;</span>, <span class="number">123</span> &#125;, &#123;<span class="string">&quot;DEF&quot;</span>, <span class="number">456</span>&#125; &#125;);          <span class="comment">//列表形式多元素插入</span></span><br><span class="line"></span><br><span class="line">m.<span class="built_in">erase</span>(m.<span class="built_in">begin</span>());     <span class="comment">//删除首部元素</span></span><br><span class="line">m.<span class="built_in">erase</span>(<span class="string">&quot;ABC&quot;</span>);         <span class="comment">//删除key值为ABC的元素</span></span><br><span class="line"></span><br><span class="line">map&lt;string, <span class="type">int</span>&gt;::iterator index = m.<span class="built_in">find</span>(<span class="string">&quot;ABC&quot;</span>);   <span class="comment">//查找key值为&quot;ABC&quot;的元素索引 通常用法: m.find(&quot;ABC&quot;) != m.end(); //找到了该元素</span></span><br><span class="line"></span><br><span class="line">m.<span class="built_in">empty</span>();      <span class="comment">//是否为空</span></span><br><span class="line">m.<span class="built_in">clear</span>();      <span class="comment">//清空所有元素</span></span><br><span class="line">m.<span class="built_in">size</span>();       <span class="comment">//m中元素的个数</span></span><br><span class="line">m.<span class="built_in">max_size</span>();   <span class="comment">//最多容纳的元素个数</span></span><br><span class="line">m.<span class="built_in">swap</span>(m1);     <span class="comment">//交换两个map</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="10-数组"><a href="#10-数组" class="headerlink" title="10.数组"></a>10.数组</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vector &lt;<span class="type">int</span>&gt; a;</span><br><span class="line">vector &lt;<span class="type">int</span>&gt; <span class="built_in">b</span>(<span class="number">10</span>); <span class="comment">//b默认长度为10</span></span><br><span class="line">vector &lt;<span class="type">int</span>&gt; <span class="built_in">c</span>(<span class="number">10</span>, <span class="number">2</span>); <span class="comment">//c用2进行初始化</span></span><br><span class="line">a.<span class="built_in">size</span>();</span><br><span class="line">a.<span class="built_in">push_back</span>(<span class="number">2</span>);</span><br><span class="line">a.<span class="built_in">back</span>(); <span class="comment">//返回vector最后一个值</span></span><br><span class="line">a.<span class="built_in">pop_back</span>(); <span class="comment">//删除最后一个值</span></span><br><span class="line"><span class="built_in">sort</span>(a.<span class="built_in">begin</span>(), a.<span class="built_in">end</span>());</span><br><span class="line"><span class="keyword">for</span>(vector&lt;<span class="type">int</span>&gt;:: iterator it = a.<span class="built_in">begin</span>(); it != a.<span class="built_in">end</span>(); it++)&#123;</span><br><span class="line">   cout&lt;&lt;*it;</span><br><span class="line">&#125;</span><br><span class="line">vector.<span class="built_in">erase</span>(it); <span class="comment">//返回删除元素的下一个元素的迭代器</span></span><br><span class="line">vector.<span class="built_in">insert</span>(it, <span class="number">2</span>); <span class="comment">//在迭代器指定的位置之前插入2，并返回表示新插入元素的迭代器</span></span><br><span class="line">*<span class="built_in">max_element</span>(myVector.<span class="built_in">begin</span>(), myVector.<span class="built_in">end</span>()); <span class="comment">//利用迭代器返回最大值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="11-栈"><a href="#11-栈" class="headerlink" title="11.栈"></a>11.栈</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">stack &lt;<span class="type">int</span>&gt; a;</span><br><span class="line">a.<span class="built_in">push</span>(<span class="number">2</span>);</span><br><span class="line">a.<span class="built_in">top</span>(); <span class="comment">//返回栈顶元素</span></span><br><span class="line">a.<span class="built_in">pop</span>();</span><br><span class="line">a.<span class="built_in">empty</span>(); <span class="comment">//如果栈为空，则返回true</span></span><br><span class="line">a.<span class="built_in">size</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-队列"><a href="#12-队列" class="headerlink" title="12.队列"></a>12.队列</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">queue &lt;int&gt; a;</span><br><span class="line">a.push(1);</span><br><span class="line">a.front();</span><br><span class="line">a.back(); </span><br><span class="line">a.pop();</span><br></pre></td></tr></table></figure>
+
+<h2 id="13-字符串"><a href="#13-字符串" class="headerlink" title="13.字符串"></a>13.字符串</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">string a; //默认&quot;&quot;</span><br><span class="line">a += &#x27;d&#x27;; </span><br><span class="line">a += &quot;ansjcknkj&quot;;</span><br><span class="line">a.back(); //返回最后一个字符</span><br><span class="line">string b = a.substr(1,5); //从位置1向后截取5个字符的子字符串</span><br><span class="line">a.pop_back(); //去掉最后一个字符</span><br><span class="line">string c = to_string(1); //整数to string</span><br><span class="line">c = to_string(1.98); //float to string</span><br><span class="line">int d = stoi(&quot;890&quot;); //string to int</span><br></pre></td></tr></table></figure>
+
+<h2 id="14-堆"><a href="#14-堆" class="headerlink" title="14.堆"></a>14.堆</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">heap（堆）C++默认实现优先队列就是用的堆，所以用优先队列会比较方便</span><br><span class="line"></span><br><span class="line">priority_queue &lt;int&gt; a; //最大堆</span><br><span class="line">priority_queue &lt;int, vector&lt;int&gt;, greater&lt;int&gt; &gt; b; //最小堆，节点值不大于两边子节点</span><br><span class="line">a.push(1);</span><br><span class="line">a.pop();</span><br><span class="line">a.top(); //返回堆顶元素</span><br></pre></td></tr></table></figure>
+
+<h2 id="15-映射表"><a href="#15-映射表" class="headerlink" title="15.映射表"></a>15.映射表</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">map &lt;int, bool&gt; a;</span><br><span class="line">a[0] = true;</span><br><span class="line">cout&lt;&lt;a[0]&lt;&lt;a[1]; //会输出true和false。如果映射表中不存在key值对应的元素，会根据默认构造函数赋值。</span><br><span class="line">a[2]++; //a[2] = 1 </span><br><span class="line">map &lt;int, bool&gt;:: iterator it = a.find(12); //没找到会返回a.end()</span><br><span class="line">for(map&lt;int, string&gt;::iterator it = myMap.begin(); it != myMap.end(); it++)&#123;</span><br><span class="line">  cout&lt;&lt;it-&gt;first&lt;&lt;it-&gt;second;</span><br><span class="line">&#125; //遍历映射表</span><br></pre></td></tr></table></figure>
+
+<h2 id="16-奇技淫巧"><a href="#16-奇技淫巧" class="headerlink" title="16.奇技淫巧"></a>16.奇技淫巧</h2><h3 id="16-1辗转相除法求最大公约数"><a href="#16-1辗转相除法求最大公约数" class="headerlink" title="16.1辗转相除法求最大公约数"></a>16.1辗转相除法求最大公约数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">fun</span><span class="params">(<span class="type">int</span> m,<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> m;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">fun</span>(n,m%n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="16-2如何判断链表有环，并找出入环点"><a href="#16-2如何判断链表有环，并找出入环点" class="headerlink" title="16.2如何判断链表有环，并找出入环点"></a>16.2如何判断链表有环，并找出入环点</h3><p>对于如何判断链表有环，可以从起点发出两个指针，一个一次一步，另一个一次两步，如果两个指针相遇，那么这个单链表就有环。<br>第一问得出相遇点后，再发出一个指针，统计这个指针再次回到这个点的距离，也就是环的距离。然后从起点再发出两个指针，一个指针在另一个前面，两个指针的距离就是环的距离，当两个指针再次相遇的时候就是环的入口。</p>
+<h3 id="16-3异或运算-可以快速判断多个项的相等结果"><a href="#16-3异或运算-可以快速判断多个项的相等结果" class="headerlink" title="16.3异或运算 可以快速判断多个项的相等结果"></a>16.3异或运算 可以快速判断多个项的相等结果</h3><p>c &#x3D; a⊕b &#x2F;&#x2F;如果a、b两个值不相同，则异或结果为1。如果a、b两个值相同，异或结果为0<br>(a⊕b)⊕c &#x3D; a⊕(b⊕c)<br>在判断数值是否相同时，可以通过异或运算快速判断<br>面，两个指针的距离就是环的距离，当两个指针再次相遇的时候就是环的入口。</p>
+<h3 id="16-4异或运算-可以快速判断多个项的相等结果"><a href="#16-4异或运算-可以快速判断多个项的相等结果" class="headerlink" title="16.4异或运算 可以快速判断多个项的相等结果"></a>16.4异或运算 可以快速判断多个项的相等结果</h3><p>c &#x3D; a⊕b &#x2F;&#x2F;如果a、b两个值不相同，则异或结果为1。如果a、b两个值相同，异或结果为0<br>(a⊕b)⊕c &#x3D; a⊕(b⊕c)<br>在判断数值是否相同时，可以通过异或运算快速判断</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/git-manual/" rel="prev" title="Git 使用手册">
+      <i class="fa fa-chevron-left"></i> Git 使用手册
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/code-segment/" rel="next" title="A collection of code snippets">
+      A collection of code snippets <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-main%E7%BB%BC%E5%90%88%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text">1.main综合模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">2.数组排序库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">3.字符串库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%90%91%E9%87%8Fvector%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">4.向量vector的基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-vector%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">5.vector初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Vector%E6%8E%92%E5%BA%8F"><span class="nav-number">6.</span> <span class="nav-text">6.Vector排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%A0%88queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">7.栈queue的基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%A0%86stack%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">8.</span> <span class="nav-text">8.堆stack的基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-hashmap%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%80%E6%98%A0%E5%B0%84%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">9.</span> <span class="nav-text">9.hashmap的基本用法(构建一一映射的关系)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E6%95%B0%E7%BB%84"><span class="nav-number">10.</span> <span class="nav-text">10.数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E6%A0%88"><span class="nav-number">11.</span> <span class="nav-text">11.栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E9%98%9F%E5%88%97"><span class="nav-number">12.</span> <span class="nav-text">12.队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">13.</span> <span class="nav-text">13.字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E5%A0%86"><span class="nav-number">14.</span> <span class="nav-text">14.堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E6%98%A0%E5%B0%84%E8%A1%A8"><span class="nav-number">15.</span> <span class="nav-text">15.映射表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7"><span class="nav-number">16.</span> <span class="nav-text">16.奇技淫巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#16-1%E8%BE%97%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95%E6%B1%82%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0"><span class="nav-number">16.1.</span> <span class="nav-text">16.1辗转相除法求最大公约数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-2%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E6%9C%89%E7%8E%AF%EF%BC%8C%E5%B9%B6%E6%89%BE%E5%87%BA%E5%85%A5%E7%8E%AF%E7%82%B9"><span class="nav-number">16.2.</span> <span class="nav-text">16.2如何判断链表有环，并找出入环点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-3%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97-%E5%8F%AF%E4%BB%A5%E5%BF%AB%E9%80%9F%E5%88%A4%E6%96%AD%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9A%84%E7%9B%B8%E7%AD%89%E7%BB%93%E6%9E%9C"><span class="nav-number">16.3.</span> <span class="nav-text">16.3异或运算 可以快速判断多个项的相等结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-4%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97-%E5%8F%AF%E4%BB%A5%E5%BF%AB%E9%80%9F%E5%88%A4%E6%96%AD%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9A%84%E7%9B%B8%E7%AD%89%E7%BB%93%E6%9E%9C"><span class="nav-number">16.4.</span> <span class="nav-text">16.4异或运算 可以快速判断多个项的相等结果</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">sitJac</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sitJac</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

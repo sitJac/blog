@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <script type="text/javascript" src="https://unpkg.com/minigrid@3.1.1/dist/minigrid.min.js"></script>
+  <link rel="stylesheet" href="/photos/photos.css">
+  <script type="text/javascript" src="/photos/photo.js"></script>
+
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sitjac.github.io","root":"/blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="构建工具有助于管理和简化构建过程，自动化的构建程序，多用于大型和复杂的项目中。 本文介绍Makefile、CMake、XMake等构建工具。 本文将以C&#x2F;C++的源码作为基础，所以必然涉及一些关于C&#x2F;C++的编译的知识，关于这方面的内容，还请各位自行学习。😘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C&#x2F;C++项目构建教程">
+<meta property="og:url" content="https://sitjac.github.io/cpp-project-build-tutorial/index.html">
+<meta property="og:site_name" content="sitJac&#39;s Blog">
+<meta property="og:description" content="构建工具有助于管理和简化构建过程，自动化的构建程序，多用于大型和复杂的项目中。 本文介绍Makefile、CMake、XMake等构建工具。 本文将以C&#x2F;C++的源码作为基础，所以必然涉及一些关于C&#x2F;C++的编译的知识，关于这方面的内容，还请各位自行学习。😘">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-23T06:44:15.000Z">
+<meta property="article:modified_time" content="2024-05-08T14:53:20.311Z">
+<meta property="article:author" content="sitJac">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sitjac.github.io/cpp-project-build-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C/C++项目构建教程 | sitJac's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sitJac's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://sitjac.github.io/cpp-project-build-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="sitJac">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sitJac's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C/C++项目构建教程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-23 14:44:15" itemprop="dateCreated datePublished" datetime="2022-09-23T14:44:15+08:00">2022-09-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="note info">
+
+<ul>
+<li>构建工具有助于管理和简化构建过程，自动化的构建程序，多用于大型和复杂的项目中。</li>
+<li>本文介绍Makefile、CMake、XMake等构建工具。</li>
+<li>本文将以C&#x2F;C++的源码作为基础，所以必然涉及一些关于C&#x2F;C++的编译的知识，关于这方面的内容，还请各位<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TN4y1375q">自行学习</a>。😘</li>
+</ul>
+</div>
+
+<span id="more"></span>
+
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>运行大型项目需要确定不同代码模块或库文件如何编译链接在一起，这需要开发者用项目构建工具来实现。</li>
+<li>本文所述构建工具，如Makefile、CMake、XMake等，是为了简化编译和链接过程，以下是使用它们的一些主要原因：<ul>
+<li>自动化：构建工具可以自动执行编译、链接和其他构建步骤，无需手动运行每个步骤。</li>
+<li>依赖管理：构建工具可以跟踪源文件之间的依赖关系，并确保在源文件更改时只重新编译必要的文件。</li>
+<li>跨平台：构建工具可以生成针对不同平台和编译器的构建文件，使得源代码可以在不同的环境中构建。</li>
+<li>可扩展：对于大型项目，构建工具可以帮助组织和管理多个源文件和库，使得构建过程更加可控。</li>
+<li>一致性：构建工具可以确保每次构建的过程都是一致的，无论是在哪个平台或环境中。</li>
+<li>集成其他工具：构建工具可以与其他工具集成，如测试框架、包管理器等，提供更完整的构建解决方案。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Make"><a href="#Make" class="headerlink" title="Make"></a>Make</h2><h3 id="Makefile是什么"><a href="#Makefile是什么" class="headerlink" title="Makefile是什么"></a>Makefile是什么</h3><ul>
+<li>Make: 是最早的构建工具之一，它使用Makefile来描述如何构建你的项目。</li>
+<li>Makefile文件按照特定语法进行编写，用以说明<strong>如何编译各个源文件</strong>并<strong>链接生成可执行文件</strong>，同时<strong>定义了源文件之间的依赖关系</strong>。</li>
+<li>尽管Makefile的语法可能有些复杂，但它在C++社区中仍然广泛使用。</li>
+</ul>
+<h3 id="Makefile工作流程"><a href="#Makefile工作流程" class="headerlink" title="Makefile工作流程"></a>Makefile工作流程</h3><pre><code>1.查找当前目录下的Makefile文件  
+2.初始化文件中的变量  
+3.分析Makefile中的所有规则  
+4.为所有的目标文件创建依赖关系  
+5.根据依赖关系，决定哪些目标文件要重新生成  
+6.执行生成命令
+</code></pre>
+<h3 id="Makefile书写规范"><a href="#Makefile书写规范" class="headerlink" title="Makefile书写规范"></a>Makefile书写规范</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">目标文件：依赖文件列表</span><br><span class="line">  &lt;Tab&gt;  命令列表</span><br></pre></td></tr></table></figure>
+
+<p><code>目标文件(target)</code>即为最终的可执行文件<code>test</code>(可自定义名称)<br>中间目标文件test1.o test2.o<br>每个目标文件和它的依赖文件用：隔开<br>每个.o文件都有一组依赖文件</p>
+<p>调用make命令可输入：<code>make target</code></p>
+<p>如果省略<code>target</code>，make就将生成Makefile文件中定义的第一个目标</p>
+<h3 id="Makefile中的变量"><a href="#Makefile中的变量" class="headerlink" title="Makefile中的变量"></a>Makefile中的变量</h3><p>Linux下的Makefile文件里面可能会使用非常多的变量，远不像前面示例Makefile文件那样简单。这些变量对大小写敏感，一般使用<strong>大写宇母</strong>。</p>
+<p>定义变量的语法：<code>VARNAME=string</code></p>
+<p>使用时，把变量用括号括起来，并在前面加上<code>$</code>符号，就可以引用变量的值：<code>$(VARNAME)</code></p>
+<p>Makefile中的变量分为</p>
+<ul>
+<li>用户自定义变量</li>
+<li>预定义变量</li>
+<li>自动变量</li>
+<li>环境变量</li>
+</ul>
+<h3 id="Makefile中的隐含规则"><a href="#Makefile中的隐含规则" class="headerlink" title="Makefile中的隐含规则"></a>Makefile中的隐含规则</h3><p>一些默认的动作，称作隐含规则的内置的规则，这些规则告诉make当用户没有完整地给出某些命令的时候，应该怎样执行。</p>
+<p>在我们使用Makefile时，有一些我们会经常使用，而且使用频率非常高的东西，比如，我们编译C&#x2F;C++的源程序为中间目标文件（Unix下是[.o]文件，Windows下是[.obj]文件）。这里讲述的就是一些在Makefile中的“隐含的”，早先约定了的，不需要我们再写出来的规则。</p>
+<p>“隐含规则”也就是一种惯例，make会按照这种“惯例”心照不喧地来运行，那怕我们的Makefile中没有书写这样的规则。例如，把[.c]文件编译成[.o]文件这一规则，你根本就不用写出来，make会自动推导出这种规则，并生成我们需要的[.o]文件。</p>
+<h3 id="Makefile的编写实例"><a href="#Makefile的编写实例" class="headerlink" title="Makefile的编写实例"></a>Makefile的编写实例</h3><p>现在有一个c程序，实现输入姓名，输入hello+用户的输入</p>
+<p>共有以下文件：input.h input.c output.h output.c main.c</p>
+<p>Makefile的编写如下</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main:input.o output.o main.o</span></span><br><span class="line">    gcc -Wall -O -g -o main main.o input.o output.o</span><br><span class="line"><span class="section">input.o:input.c input.h</span></span><br><span class="line">    gcc -Wall -O -g -o input.o input.c</span><br><span class="line"><span class="section">output.o:output.c output.h</span></span><br><span class="line">    gcc -Wall -O -g -o output.o output.c</span><br><span class="line"><span class="section">main.o:main.c input.h output.h</span></span><br><span class="line">    gcc -Wall -O -g -o main.o main.c</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -rf test *.o</span><br></pre></td></tr></table></figure>
+
+<h3 id="Makefile的简化"><a href="#Makefile的简化" class="headerlink" title="Makefile的简化"></a>Makefile的简化</h3><p>通过上面的代码我们可以发现，我们在编写Makefile文件的时候有大量重复语句，可以通过<code>自定义变量</code>、<code>自动变量</code>、<code>隐含规则</code>等方式简化</p>
+<p>第一次优化：<code>自定义变量</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -O -g</span><br><span class="line">OBJ=input.o output.o main.o</span><br><span class="line"></span><br><span class="line"><span class="section">main:<span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o main main.o input.o output.o</span><br><span class="line"><span class="section">input.o:input.c input.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o input.o input.c</span><br><span class="line"><span class="section">output.o:output.c output.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o output.o output.c</span><br><span class="line"><span class="section">main.o:main.c input.h output.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o main.o main.c</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -rf test *.o</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>自定义变量</code>，我们将原本冗长的语句进行缩短</p>
+<p>第二次优化：<code>自动变量</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -O -g</span><br><span class="line">OBJ=input.o output.o main.o</span><br><span class="line"></span><br><span class="line"><span class="section">main:<span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"><span class="section">input.o:input.c input.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"><span class="section">output.o:output.c output.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"><span class="section">main.o:main.c input.h output.h</span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -rf test *.o</span><br></pre></td></tr></table></figure>
+
+<p>第三次优化：<code>隐含规则</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall -O -g</span><br><span class="line">OBJ=input.o output.o m</span><br><span class="line"></span><br><span class="line"><span class="section">main:<span class="variable">$(OBJ)</span></span></span><br><span class="line">    <span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -rf test *.o</span><br></pre></td></tr></table></figure>
+
+<h2 id="CMake"><a href="#CMake" class="headerlink" title="CMake"></a>CMake</h2><blockquote>
+<p>TBD……</p>
+</blockquote>
+<h2 id="XMake"><a href="#XMake" class="headerlink" title="XMake"></a>XMake</h2><blockquote>
+<p>TBD……</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/make.html">GNU Make Manual</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV188411L7d2">Makefile 20分钟入门，简简单单，展示如何使用Makefile管理和编译C++代码</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bg411p7oS">CMake 6分钟入门，不用再写复杂的Makefile</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/probability-preliminaries-2022/" rel="prev" title="Probability Tutorial Zero">
+      <i class="fa fa-chevron-left"></i> Probability Tutorial Zero
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/adb-manual/" rel="next" title="ADB命令备忘清单">
+      ADB命令备忘清单 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Make"><span class="nav-number">2.</span> <span class="nav-text">Make</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">Makefile是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">Makefile工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E4%B9%A6%E5%86%99%E8%A7%84%E8%8C%83"><span class="nav-number">2.3.</span> <span class="nav-text">Makefile书写规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.4.</span> <span class="nav-text">Makefile中的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E4%B8%AD%E7%9A%84%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99"><span class="nav-number">2.5.</span> <span class="nav-text">Makefile中的隐含规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E7%9A%84%E7%BC%96%E5%86%99%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.6.</span> <span class="nav-text">Makefile的编写实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile%E7%9A%84%E7%AE%80%E5%8C%96"><span class="nav-number">2.7.</span> <span class="nav-text">Makefile的简化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMake"><span class="nav-number">3.</span> <span class="nav-text">CMake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XMake"><span class="nav-number">4.</span> <span class="nav-text">XMake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">sitJac</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sitJac</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/muse.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
